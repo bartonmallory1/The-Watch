@@ -1,0 +1,56 @@
+﻿@page "/"
+@using Syncfusion.Blazor.Maps;
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<div>
+    <iframe width="500" height="400" frameborder="0" src=@bingMapURL scrolling="no">
+     </iframe>
+     <div style="white-space: nowrap; text-align: center; width: 500px; padding: 6px 0;">
+        <a id="largeMapLink" target="_blank" href="https://www.bing.com/maps?cp=35.12552479342789~-89.8846435546875&amp;sty=r&amp;lvl=11&amp;FORM=MBEDLD">View Larger Map</a> &nbsp; | &nbsp;
+        <a id="dirMapLink" target="_blank" href="https://www.bing.com/maps/directions?cp=35.12552479342789~-89.8846435546875&amp;sty=r&amp;lvl=11&amp;rtp=~pos.35.12552479342789_-89.8846435546875____&amp;FORM=MBEDLD">Get Directions</a>
+    </div>
+    
+</div>
+
+ <button
+     onclick="GeneratePushpinsAndCreateMap"
+ ></button>
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+@code{
+    string bingMapURL = "https://www.bing.com/maps/embed?h=400&w=500&cp=35.12552479342789~-89.8846435546875&lvl=11&typ=d&sty=r&src=SHELL&FORM=MBEDV8";
+
+    public async Task GeneratePushpinsAndCreateMap()
+    {
+        try
+        {
+            // Generate 10 random pushpins
+            var random = new Random();
+            var randomPushpins = Enumerable.Range(0, 10)
+                .Select(i => new { Latitude = 47.6 + (random.NextDouble() - 0.5) / 10, Longitude = -122.35 + (random.NextDouble() - 0.5) / 10, Label = (char)('A' + i) })
+                .ToList();
+
+            // Build the Bing Maps API call
+            var bingMapUrl = "https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/47.619048,-122.35384/15?mapSize=500,500";
+            foreach (var pushpin in randomPushpins)
+            {
+                bingMapUrl += "&pp=" + pushpin.Latitude + "," + pushpin.Longitude + ";;" + pushpin.Label;
+            }
+            bingMapUrl = "&mapMetadata=1&o=xml&key=" + "Apa9h5v5oA1qTLyQ - oW4q7AQuHFsPg0lXr4gX8RQrV5Tx--5CsGL - UoQtGEx_8_v";
+
+            StateHasChanged();
+
+
+          
+        }
+        catch (Exception ex)
+        {
+            // Handle the exception
+            Console.WriteLine(ex.Message);
+        }
+    }
+    
+}
